@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E4E6E3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1C2024" media="(prefers-color-scheme: dark)">
+<title>แฟ้มคดี NUZEN</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23252A2F'/%3E%3Cpath d='M9 24V8l14 16V8' fill='none' stroke='%23F9FAF8' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@300;400;500;600&family=Noto+Sans+Thai:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark" viewBox="0 0 40 40">
+      <path d="M6 34V6h28v28" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M13 28V12l14 16V12" fill="none" stroke="currentColor" stroke-width="2.6"/>
+      <path d="M2 34h36" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" class="hatch-line"/>
+    </pattern>
+    <pattern id="earth" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+      <line x1="0" y1="0" x2="0" y2="10" class="earth-line"/>
+    </pattern>
+  </defs>
+</svg>
+
+<!-- LOCK -->
+<main id="lock" class="lock" hidden>
+  <form id="lockForm" class="lock__card" autocomplete="off">
+    <div class="lock__brand">
+      <svg class="mark"><use href="#mark"/></svg>
+      <div>
+        <div class="brand-en">NUZEN COMPANY LIMITED</div>
+        <div class="brand-th">บริษัท นูเซ็น จำกัด</div>
+      </div>
+    </div>
+    <svg class="lock__frame" viewBox="0 0 320 90" aria-hidden="true">
+      <rect x="0" y="60" width="320" height="22" fill="url(#earth)" class="earth"/>
+      <line x1="0" y1="60" x2="320" y2="60" class="ground"/>
+      <g class="frame">
+        <line x1="40" y1="8" x2="40" y2="60"/><line x1="160" y1="8" x2="160" y2="60"/><line x1="280" y1="8" x2="280" y2="60"/>
+        <line x1="40" y1="8" x2="280" y2="8"/><line x1="40" y1="34" x2="280" y2="34"/>
+        <line x1="40" y1="60" x2="40" y2="86"/><line x1="160" y1="60" x2="160" y2="86"/><line x1="280" y1="60" x2="280" y2="86"/>
+      </g>
+    </svg>
+    <h1 class="lock__title">แฟ้มเอกสารคดี</h1>
+    <p class="lock__lead">ใส่รหัสผ่านที่ได้รับเพื่อเปิดแฟ้ม</p>
+    <label class="field">
+      <span class="field__label">รหัสผ่าน</span>
+      <input id="pw" type="password" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="xxxx-xxxx-xxxx-xxxx" required>
+    </label>
+    <label class="remember">
+      <input id="remember" type="checkbox" checked>
+      <span>จำรหัสบนเครื่องนี้ ไม่ต้องใส่ใหม่ทุกครั้ง</span>
+    </label>
+    <button class="btn btn--primary" id="unlockBtn" type="submit">เปิดแฟ้ม</button>
+    <p id="lockMsg" class="lock__msg" role="status"></p>
+    <p class="lock__fine">ไฟล์ทั้งหมดถูกเข้ารหัสไว้ เปิดอ่านได้เฉพาะผู้ที่มีรหัสผ่าน</p>
+  </form>
+</main>
+
+<!-- APP -->
+<div id="app" hidden>
+  <header class="topbar">
+    <div class="topbar__in">
+      <a class="brand" href="#top" aria-label="กลับด้านบน">
+        <svg class="mark"><use href="#mark"/></svg>
+        <span>
+          <span class="brand-en">NUZEN</span>
+          <span class="brand-th">บริษัท นูเซ็น จำกัด</span>
+        </span>
+      </a>
+      <button class="btn btn--quiet" id="logout" type="button">ออกจากระบบ</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <h1 class="hero__title">แฟ้มเอกสารคดี</h1>
+        <p class="hero__lead" id="lead"></p>
+      </div>
+      <div class="wrap wrap--wide">
+        <figure class="elevation">
+          <svg id="elev" viewBox="0 0 960 400" role="img" aria-labelledby="elevTitle"><title id="elevTitle">ความครบถ้วนของเอกสารแต่ละคดี</title></svg>
+          <div class="bays" id="bays"></div>
+          <figcaption class="legend">
+            <span><i class="slab ok"></i>มีครบแล้ว</span>
+            <span><i class="slab partial"></i>มีบางส่วน</span>
+            <span><i class="slab missing"></i>ยังขาด</span>
+            <span class="legend__hint">หนึ่งชั้นคือเอกสารหนึ่งรายการที่คดีต้องใช้</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="todo" id="todo">
+      <div class="wrap">
+        <h2 class="section-title">สิ่งที่ต้องหาเพิ่ม</h2>
+        <ol class="todo__list" id="todoList"></ol>
+      </div>
+    </section>
+
+    <div class="finder">
+      <div class="wrap finder__in">
+        <svg class="finder__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+        <input id="q" type="search" placeholder="ค้นหาเอกสาร เช่น ใบเสร็จ เข็ม สลิป" autocomplete="off" aria-label="ค้นหาเอกสาร">
+        <span class="finder__count" id="qCount"></span>
+      </div>
+    </div>
+
+    <div class="wrap" id="cases"></div>
+
+    <footer class="foot">
+      <div class="wrap foot__in">
+        <svg class="mark"><use href="#mark"/></svg>
+        <div>
+          <div class="brand-en">NUZEN COMPANY LIMITED</div>
+          <div class="foot__note">เอกสารภายในบริษัท ห้ามส่งต่อหรือเผยแพร่ <span id="rev"></span></div>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<!-- VIEWER -->
+<div id="viewer" class="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vTitle">
+  <div class="viewer__bar">
+    <button class="btn btn--quiet" id="vClose" type="button">ปิด</button>
+    <div class="viewer__title">
+      <span id="vTitle"></span>
+      <span class="viewer__meta" id="vMeta"></span>
+    </div>
+    <div class="viewer__tools">
+      <button class="icon-btn" id="vOut" type="button" aria-label="ย่อ">−</button>
+      <button class="icon-btn" id="vIn" type="button" aria-label="ขยาย">+</button>
+      <a class="btn btn--quiet" id="vDownload" download>ดาวน์โหลด</a>
+    </div>
+  </div>
+  <div class="viewer__body" id="vBody"></div>
+  <div class="viewer__progress"><span id="vProgress"></span></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
