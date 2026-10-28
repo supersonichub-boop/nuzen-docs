@@ -116,7 +116,9 @@
     const m = name.match(/^(\d+\.\d+)\s+(.*)$/);
     return m ? { no: m[1], title: m[2] } : { no: "", title: name.replace(/_/g, " ") };
   }
-  const refsFor = (c, ref) => c.docs.filter((d) => d.no === ref || d.group.startsWith(ref));
+  // a ref like "1.08" may point into another case's folder (case 4 reuses folder 1's files)
+  const refsFor = (c, ref) => (manifest.cases.find((x) => x.folder === ref.split(".")[0]) || c)
+    .docs.filter((d) => d.no === ref || d.group.startsWith(ref));
 
   // ---------- render ----------
   function showApp(animate) {
@@ -181,7 +183,8 @@
 
   function drawElevation(cases) {
     const svg = $("#elev");
-    const ground = 300, floorH = 42, x0 = 60, bayW = 280;
+    const maxFloors = Math.max(...cases.map((c) => c.checklist.length));
+    const ground = 300, floorH = Math.min(42, 270 / maxFloors), x0 = 60, bayW = 840 / cases.length;
     const xs = cases.map((_, i) => x0 + i * bayW).concat(x0 + cases.length * bayW);
     const tops = cases.map((c) => ground - c.checklist.length * floorH);
     let out = `<title id="elevTitle">ความครบถ้วนของเอกสารแต่ละคดี</title>`;
@@ -206,7 +209,7 @@
       slabs.forEach((it, k) => {
         const y = ground - (k + 1) * floorH;
         g += `<line class="beam" x1="${bx}" y1="${y}" x2="${bx + bayW}" y2="${y}"/>`;
-        g += `<g class="slab-g" style="--d:${(0.15 + k * 0.12 + b * 0.06).toFixed(2)}s"><rect class="s-${it.status}" x="${bx + 14}" y="${y + 8}" width="${bayW - 28}" height="${floorH - 16}" rx="1.5"><title>${esc(it.item)} — ${STATE[it.status]}</title></rect></g>`;
+        g += `<g class="slab-g" style="--d:${(0.15 + k * 0.12 + b * 0.06).toFixed(2)}s"><rect class="s-${it.status}" x="${bx + 14}" y="${y + floorH * 0.2}" width="${bayW - 28}" height="${floorH * 0.6}" rx="1.5"><title>${esc(it.item)} — ${STATE[it.status]}</title></rect></g>`;
       });
       g += `<line class="roof" x1="${bx - 8}" y1="${tops[b]}" x2="${bx + bayW + 8}" y2="${tops[b]}"/>`;
       g += `</a>`;
